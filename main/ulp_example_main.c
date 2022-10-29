@@ -45,19 +45,14 @@ static void init_ulp_program(void)
             (ulp_main_bin_end - ulp_main_bin_start) / sizeof(uint32_t));
     ESP_ERROR_CHECK(err);
 
-
     gpio_num_t gpio_num = GPIO_NUM_12;
     int rtcio_num = rtc_io_number_get(gpio_num);
-
 
     gpio_num_t gpio_num2 = GPIO_NUM_13;
     int rtcio_num2 = rtc_io_number_get(gpio_num2);
 
-
-
     gpio_num_t gpio_num3 = GPIO_NUM_38;
     int rtcio_num3 = rtc_io_number_get(gpio_num3);
-
 
 
     ulp_next_edge_1 = 0;
@@ -74,7 +69,6 @@ static void init_ulp_program(void)
     ulp_io_number_3 = rtcio_num3; /* map from GPIO# to RTC_IO# */
 
     ulp_io_index=0;
-
 
 
     rtc_gpio_init(gpio_num);
@@ -96,34 +90,9 @@ static void init_ulp_program(void)
     rtc_gpio_hold_en(gpio_num3);
 
     esp_deep_sleep_disable_rom_logging();
-
-
     ulp_set_wakeup_period(0, 20000);
-
 
     err = ulp_run(&ulp_entry - RTC_SLOW_MEM);
     ESP_ERROR_CHECK(err);
 }
 
-static void update_pulse_count(void)
-{
-    const char* namespace = "plusecnt";
-    const char* count_key = "count";
-
-    nvs_flash_init();
-    nvs_handle_t handle;
-    nvs_open(namespace, NVS_READWRITE, &handle);
-    uint32_t pulse_count = 0;
-    esp_err_t err = nvs_get_u32(handle, count_key, &pulse_count);
-    assert(err == ESP_OK || err == ESP_ERR_NVS_NOT_FOUND);
-    printf("Read pulse count from NVS: %5d\n", pulse_count);
-
-
-
-
-    pulse_count += 1;
-    nvs_set_u32(handle, count_key, pulse_count);
-    nvs_commit(handle);
-    nvs_close(handle);
-    printf("Wrote updated pulse count to NVS: %5d\n", pulse_count);
-}
