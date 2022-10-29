@@ -12,9 +12,8 @@
 #include "driver/rtc_io.h"
 
 
-#include "esp32/ulp.h"
-
 #include "ulp_main.h"
+
 
 extern const uint8_t ulp_main_bin_start[] asm("_binary_ulp_main_bin_start");
 extern const uint8_t ulp_main_bin_end[]   asm("_binary_ulp_main_bin_end");
@@ -22,7 +21,7 @@ extern const uint8_t ulp_main_bin_end[]   asm("_binary_ulp_main_bin_end");
 static void init_ulp_program(void);
 static void update_pulse_count(void);
 
-void app_main(void)
+void app_main2(void)
 {
     esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
     printf("cause %d\n", cause);
