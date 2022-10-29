@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include <freertos/task.h>
+#include <esp_log.h>
 #include "esp_sleep.h"
 #include "nvs.h"
 #include "nvs_flash.h"
@@ -29,8 +30,8 @@ void app_main(void)
         printf("Not ULP wakeup, initializing ULP\n");
         init_ulp_program();
     } else {
-        printf("ULP wakeup, saving pulse count\n");
-        update_pulse_count();
+
+        ESP_LOGE("wake","%d",ulp_io_index%3);
     }
 
     printf("Entering deep sleep\n\n");
@@ -47,24 +48,32 @@ static void init_ulp_program(void)
 
     gpio_num_t gpio_num = GPIO_NUM_12;
     int rtcio_num = rtc_io_number_get(gpio_num);
-    assert(rtc_gpio_is_valid_gpio(gpio_num) && "GPIO used for pulse counting must be an RTC IO");
 
 
     gpio_num_t gpio_num2 = GPIO_NUM_13;
     int rtcio_num2 = rtc_io_number_get(gpio_num2);
-    assert(rtc_gpio_is_valid_gpio(gpio_num2) && "GPIO used for pulse counting must be an RTC IO");
 
 
 
     gpio_num_t gpio_num3 = GPIO_NUM_38;
     int rtcio_num3 = rtc_io_number_get(gpio_num3);
-    assert(rtc_gpio_is_valid_gpio(gpio_num3) && "GPIO used for pulse counting must be an RTC IO");
 
 
 
     ulp_next_edge_1 = 0;
     ulp_last_edge_1 = 1-ulp_next_edge_1;
     ulp_io_number_1 = rtcio_num; /* map from GPIO# to RTC_IO# */
+
+
+    ulp_next_edge_2 = 0;
+    ulp_last_edge_2 = 1-ulp_next_edge_2;
+    ulp_io_number_2 = rtcio_num2; /* map from GPIO# to RTC_IO# */
+
+    ulp_next_edge_3 = 0;
+    ulp_last_edge_3 = 1-ulp_next_edge_2;
+    ulp_io_number_3 = rtcio_num3; /* map from GPIO# to RTC_IO# */
+
+    ulp_io_index=0;
 
 
 
