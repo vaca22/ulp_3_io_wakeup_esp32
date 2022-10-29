@@ -30,7 +30,6 @@ void app_main(void)
         printf("Not ULP wakeup, initializing ULP\n");
         init_ulp_program();
     } else {
-
         ESP_LOGE("wake","%d",ulp_io_index%3);
     }
 
