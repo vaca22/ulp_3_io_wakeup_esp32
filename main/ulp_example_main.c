@@ -31,7 +31,6 @@ void app_main(void)
     } else {
         printf("ULP wakeup, saving pulse count\n");
         update_pulse_count();
-        vTaskDelay(100);
     }
 
     printf("Entering deep sleep\n\n");
