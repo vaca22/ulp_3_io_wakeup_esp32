@@ -31,7 +31,7 @@ void app_main(void)
     } else {
         printf("ULP wakeup, saving pulse count\n");
         update_pulse_count();
-        vTaskDelay(300);
+        vTaskDelay(100);
     }
 
     printf("Entering deep sleep\n\n");
@@ -64,10 +64,9 @@ static void init_ulp_program(void)
 
 
     ulp_next_edge_1 = 0;
-    ulp_init_edge_1 = 1-ulp_next_edge_1;
+    ulp_last_edge_1 = 1-ulp_next_edge_1;
     ulp_io_number_1 = rtcio_num; /* map from GPIO# to RTC_IO# */
-    ulp_debounce_counter_1 = 10;
-    ulp_debounce_max_count_1 = 10;
+
 
 
     rtc_gpio_init(gpio_num);

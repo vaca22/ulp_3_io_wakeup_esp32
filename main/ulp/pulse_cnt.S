@@ -14,8 +14,8 @@ next_edge_1:
 
 
 
-    .global init_edge_1
-init_edge_1:
+    .global last_edge_1
+last_edge_1:
     .long 0
 
 
@@ -26,15 +26,7 @@ init_edge_1:
 io_number_1:
 	.long 0
 
-	.global debounce_counter_1
-debounce_counter_1:
-	.long 0
 
-	/* Value to which debounce_counter gets reset.
-	   Set by the main program. */
-	.global debounce_max_count_1
-debounce_max_count_1:
-	.long 0
 
 
 	/* Code goes into .text section */
@@ -53,7 +45,6 @@ entry:
 	jump read_done
 
 
-
 	/* Read the value of RTC IOs 16-17, into R0 */
 read_io_high:
 	READ_RTC_REG(RTC_GPIO_IN_REG, RTC_GPIO_IN_NEXT_S + 16, 2)
@@ -61,54 +52,32 @@ read_io_high:
 	rsh r0, r0, r3
 read_done:
 	and r0, r0, 1
-	/* State of input changed? */
-	move r3, init_edge_1
+
+    move r3, next_edge_1
 	ld r3, r3, 0
-	add r3, r0, r3
+
+    move r2, last_edge_1
+	ld r2, r2, 0
+
+	add r3, r2, r3
 	and r3, r3, 1
-	jump changed, eq
-	/* Not changed */
-	/* Reset debounce_counter to debounce_max_count */
-	move r3, debounce_max_count_1
-	move r2, debounce_counter_1
-	ld r3, r3, 0
-	st r3, r2, 0
-	/* End program */
-	halt
+	jump in_want_state, eq
 
-	.global changed
-changed:
-	/* Input state changed */
-	/* Has debounce_counter reached zero? */
-	move r3, debounce_counter_1
-	ld r2, r3, 0
-	add r2, r2, 0 /* dummy ADD to use "jump if ALU result is zero" */
-	jump edge_detected, eq
-	/* Not yet. Decrement debounce_counter */
-	sub r2, r2, 1
-	st r2, r3, 0
-	/* End program */
-	halt
+    move r2, next_edge_1
+	ld r2, r2, 0
+	add r0, r2, r0
+	and r0, r0, 1
+	jump flip, eq
+    halt
 
-	.global edge_detected
-edge_detected:
-
-
-
-	/* Reset debounce_counter to debounce_max_count */
-	move r3, debounce_max_count_1
-	move r2, debounce_counter_1
-	ld r3, r3, 0
-	st r3, r2, 0
-
+in_want_state:
+    move r3, last_edge_1
+	st r0, r3, 0
+    halt
+flip:
+    move r3, last_edge_1
+	st r0, r3, 0
 	jump wake_up
-
-	halt
-
-
-
-
-	/* End program */
 	halt
 
 
