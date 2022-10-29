@@ -23,6 +23,7 @@ static void init_ulp_program(void);
 
 void app_main(void)
 {
+    ESP_LOGE("begin","gaga");
     esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
     printf("cause %d\n", cause);
     if (cause != ESP_SLEEP_WAKEUP_ULP) {
