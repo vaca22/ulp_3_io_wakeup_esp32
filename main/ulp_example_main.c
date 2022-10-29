@@ -63,10 +63,11 @@ static void init_ulp_program(void)
 
 
 
-    ulp_next_edge = 0;
-    ulp_io_number = rtcio_num; /* map from GPIO# to RTC_IO# */
-    ulp_io_number2 = rtcio_num2;
-    ulp_io_number3 = rtcio_num3;
+    ulp_next_edge_1 = 0;
+    ulp_init_edge_1 = 1-ulp_next_edge_1;
+    ulp_io_number_1 = rtcio_num; /* map from GPIO# to RTC_IO# */
+    ulp_debounce_counter_1 = 10;
+    ulp_debounce_max_count_1 = 10;
 
 
     rtc_gpio_init(gpio_num);
