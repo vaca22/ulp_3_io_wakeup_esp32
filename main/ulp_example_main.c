@@ -20,7 +20,6 @@ extern const uint8_t ulp_main_bin_start[] asm("_binary_ulp_main_bin_start");
 extern const uint8_t ulp_main_bin_end[]   asm("_binary_ulp_main_bin_end");
 
 static void init_ulp_program(void);
-static void update_pulse_count(void);
 
 void app_main(void)
 {
@@ -33,7 +32,7 @@ void app_main(void)
         ESP_LOGE("wake","%d",ulp_io_index%3);
     }
 
-    printf("Entering deep sleep\n\n");
+
     esp_sleep_enable_ulp_wakeup();
     esp_deep_sleep_start();
 }
