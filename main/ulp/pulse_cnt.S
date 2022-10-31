@@ -6,8 +6,13 @@
 
 	/* Define variables, which go into .bss section (zero-initialized data) */
 	.bss
+    .global num_1
+num_1:
+	.long 0
 
-
+    .global io_wake
+io_wake:
+	.long 0
 
     .global io_index
 io_index:
@@ -76,7 +81,9 @@ entry:
 	/* Load io_number */
     move r1, io_index
 	ld r0, r1, 0
-    add r0,r0,1
+    move r2, num_1
+    ld r2,r2,0
+    add r0,r0,r2
     jumpr io_index_loop_end,0x3,lt
     move r0,0
 
@@ -168,6 +175,10 @@ flip:
     ld r3, r3, 0
 	st r0, r3, 0
 
+    move r3,io_index
+    ld r3,r3,0
+    move r2,io_wake
+    st r3,r2,0
 	jump wake_up
 	halt
 
