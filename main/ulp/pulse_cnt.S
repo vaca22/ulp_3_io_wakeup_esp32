@@ -6,9 +6,7 @@
 
 	/* Define variables, which go into .bss section (zero-initialized data) */
 	.bss
-    .global num_1
-num_1:
-	.long 0
+
 
     .global io_wake
 io_wake:
@@ -81,9 +79,7 @@ entry:
 	/* Load io_number */
     move r1, io_index
 	ld r0, r1, 0
-    move r2, num_1
-    ld r2,r2,0
-    add r0,r0,r2
+    add r0,r0,1
     jumpr io_index_loop_end,0x3,lt
     move r0,0
 

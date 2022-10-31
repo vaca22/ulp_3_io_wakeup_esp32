@@ -53,7 +53,7 @@ static void init_ulp_program(void)
     gpio_num_t gpio_num3 = GPIO_NUM_38;
     int rtcio_num3 = rtc_io_number_get(gpio_num3);
 
-    ulp_num_1=1;
+
 
     ulp_next_edge_1 = 0;
     ulp_last_edge_1 = 1-ulp_next_edge_1;
